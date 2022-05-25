@@ -4,19 +4,28 @@ const BASE_URL = 'https://628b2f12667aea3a3e290de6.mockapi.io/todos'
 let todosArray = [];
 
 
-function goToTodoPage(todo) { 
+function goToTodoPage(id) { 
 //  parametri url: www.pippo.it/nome pagina?K(ey)=V(alue)&K=V
   let urlString = "/todo.html";
-  if (todo) { 
+  if (id) { 
 //  se c'è un id (tipo in funzione edit), porto in nuova pagina in cui passo lo stesso id
     urlString = urlString + 
                 '?id=' + 
-                todo.id + 
-                '&name=' + 
-                todo.name
+                  id; 
+
   }
   window.location.href = urlString;
-}
+} 
+
+// function goToToDoPage2(todo) {
+//   let urlString = "/todo.html";
+//   if (todo) {  
+//     const todoString = JSON.stringify(todo);
+//     sessionStorage.setItem('selectedToDo', todoString);  // voglio salver todo in session sotrage, 
+    //                                                      lo salvo quindi come key(che imposto al momeneto come stringa), seguita dalla value (in stringa)
+//   }
+//   window.location.href = urlString;
+// }
 
 function populateTagContainer(container, tags){
   for (const tag of tags) {
@@ -114,7 +123,7 @@ function displayTodos(todos){
 
     const editButton = todoCard.querySelector('.edit-button'); 
 //  ho passato id della task su cui premo "edit"
-    editButton.onclick = () => goToTodoPage(todo);
+    editButton.onclick = () => goToTodoPage(todo.id);
 
     const divider = todoCard.querySelector('.divider');
     divider.style.backgroundColor = todo.priority.color;
