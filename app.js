@@ -1,18 +1,19 @@
 
-const BASE_URL = 'https://628b2f12667aea3a3e290de6.mockapi.io/todos'
+const BASE_URL = 'https://628d3321a3fd714fd040dac4.mockapi.io/todo'
 
 let todosArray = [];
 
 
-function goToTodoPage(id) { 
+function goToTodoPage(id, name) { 
 //  parametri url: www.pippo.it/nome pagina?K(ey)=V(alue)&K=V
   let urlString = "/todo.html";
-  if (id) { 
+  if (id && name) { 
 //  se c'è un id (tipo in funzione edit), porto in nuova pagina in cui passo lo stesso id
     urlString = urlString + 
                 '?id=' + 
-                  id; 
-
+                id + 
+                '?name=' + 
+                name; 
   }
   window.location.href = urlString;
 } 
@@ -123,7 +124,7 @@ function displayTodos(todos){
 
     const editButton = todoCard.querySelector('.edit-button'); 
 //  ho passato id della task su cui premo "edit"
-    editButton.onclick = () => goToTodoPage(todo.id);
+    editButton.onclick = () => goToTodoPage(todo.id, todo.name);
 
     const divider = todoCard.querySelector('.divider');
     divider.style.backgroundColor = todo.priority.color;

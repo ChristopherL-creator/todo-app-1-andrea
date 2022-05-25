@@ -22,7 +22,7 @@ console.log('sono todo.js', window.location.href);
 
 function parseUrlParams() {  //  secondo metodo
   const urlSearchParams = new URLSearchParams(window.location.search); //creo oggetto 
-  const params = Object.fromEntries(urlSearchParams.entries()); //ritraforma in oggett già decodificato 
+  const params = Object.fromEntries(urlSearchParams.entries()); //ritrasforma in oggett già decodificato 
   return params;
   // console.log('params', params);
 } 
@@ -40,9 +40,9 @@ function getToDoFromSessionStorage() {
 const toDoString = sessionStorage.getItem('selectedToDo');  //  richiamo todo da app.js, mi ridà una stringa, devo riconvertirla in oggetto
   if (toDoString) { 
     const todo = JSON.parse(toDoString);  //  converto string in oggetto
-    console.log('todo', todo);  //  oggetto in session storage
+    console.log('todo', todo);  //  oggetto in session storage 
   }
-} 
+}
 
 getToDoFromSessionStorage(); 
 
