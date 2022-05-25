@@ -4,8 +4,18 @@ const BASE_URL = 'https://628b2f12667aea3a3e290de6.mockapi.io/todos'
 let todosArray = [];
 
 
-function goToTodoPage() {
-  window.location.href = "/todo.html";
+function goToTodoPage(todo) { 
+//  parametri url: www.pippo.it/nome pagina?K(ey)=V(alue)&K=V
+  let urlString = "/todo.html";
+  if (todo) { 
+//  se c'è un id (tipo in funzione edit), porto in nuova pagina in cui passo lo stesso id
+    urlString = urlString + 
+                '?id=' + 
+                todo.id + 
+                '&name=' + 
+                todo.name
+  }
+  window.location.href = urlString;
 }
 
 function populateTagContainer(container, tags){
@@ -72,6 +82,14 @@ function deleteTodo(id){
   .then(response => response.json())
   .then(result => removeTodoAndRefesh(result))
   .catch(error => stopLoading())
+} 
+
+function requestDeleteToDo(id) {
+  if(confirm('sicuro?')){ 
+    deleteTodo(id);
+  } else { 
+    alert('pheww');
+  } 
 }
 
 function displayTodos(todos){
@@ -92,7 +110,11 @@ function displayTodos(todos){
     populateTagContainer(tagContainer, todo.tags)
 
     const deleteButton = todoCard.querySelector('.delete-button');
-    deleteButton.onclick = () => deleteTodo(todo.id);
+    deleteButton.onclick = () => requestDeleteToDo(todo.id); 
+
+    const editButton = todoCard.querySelector('.edit-button'); 
+//  ho passato id della task su cui premo "edit"
+    editButton.onclick = () => goToTodoPage(todo);
 
     const divider = todoCard.querySelector('.divider');
     divider.style.backgroundColor = todo.priority.color;
@@ -118,7 +140,9 @@ function displayTodos(todos){
 
 function initTodos(todos){
   stopLoading();
-  todosArray = todos.map(obj => Todo.fromDbObj(obj));
+  todosArray = todos.map(obj => Todo.fromDbObj(obj)); 
+//  ordinare per priorità
+  todosArray.sort(Todo.orderToDoByPriority);
   displayTodos(todosArray);
 }
 
