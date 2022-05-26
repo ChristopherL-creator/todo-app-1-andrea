@@ -2,8 +2,9 @@
 
 const BASE_URL = 'https://628d3321a3fd714fd040dac4.mockapi.io/todo' 
 
-let selectedToDo;
+let selectedToDo = new Todo('new todo') // come se fose un todo nuovo
 
+const params = parseUrlParams();  //  chiamo parse paramas
 // function parseUrlParams() {
 //   const url = window.location.href; 
 //   const urlArray = url.split('?') //  spexxo nel punto interrogativo; divido tra url e parametri
@@ -50,7 +51,13 @@ function loadSelectedToDos(id){
   id; 
   fetch(todoUrl) 
   .then(resp => resp.json()) 
-  .then(result => fillForm(result));
+  .then(result => initSelectedToDo(result));
+} 
+
+function initSelectedToDo(obj) {
+  const toDo = Todo.fromDbObj(obj); //  creo todo da model 
+  selectedToDo = toDo; 
+  fillForm(selectedToDo);
 }
 
 //  prendo tags, li ciclo, controllo se nome è di quelli già preseti in array, in caso farò match: 
@@ -103,24 +110,71 @@ function filterTags(t1, t2) { // tiene tutti i tag diversi da tag di input
   return t1 !== t2;
 }
 
-function fillForm(obj) {
-  const toDo = Todo.fromDbObj(obj); //  creo todo da model 
-  selectedToDo = toDo; 
+function fillForm(toDo) {
   const nameInput = document.getElementById('name-input'); 
   nameInput.value = toDo.name; 
   colorTags(toDo.tags); 
   colorPriority(toDo.priority);
+} 
+
+function saveToDo() { //  deve fare solo un controllo, che ci sia il name nell'inputbox
+  console.log('ciao');
+  const nameInput = document.getElementById('name-input'); 
+  const name = nameInput.value.trim()  //  imposto valore inputbox come name 
+  
+  if (name) {
+    
+    selectedToDo.name = name;  
+    
+    const dbObj = selectedToDo.toDbObj(); //  prendo oggetto da model
+    
+    const dbObjJson = JSON.stringify(dbObj);  //  trasformo oggetto in stringa 
+
+    let url; 
+    let fetchOptions;
+    
+    if(params.id){ 
+      url = BASE_URL + '/' + params.id; //  creo url con nuovo todo
+    
+      fetchOptions = { 
+        method: 'PUT', body: dbObjJson, headers:{ 
+          'Content-Type': 'application/json'
+        }
+      }; 
+    } else { 
+      url = BASE_URL; 
+    
+      fetchOptions = { 
+        method: 'post', body: dbObjJson, headers:{ 
+          'Content-Type': 'application/json'
+        }
+      };
+
+      
+      
+    }
+
+    fetch(url, fetchOptions) 
+      .then(resp => resp.json()) 
+      .then(res => goHome()) 
+
+  
+  } else { 
+    alert('non posso salvare todo senza nome')
+  }
 }
 
-const params = parseUrlParams();  //  chiamo parse paramas
+
 if (params.id) {  //  se hanno id, li ho chiamati per modifica
   checkTitle(); 
   loadSelectedToDos(params.id);
+} else { 
+  fillForm(selectedToDo)
 } 
 
-
-
-
+//  creo todo vuoto, 
+//  se sono in modifica riempio todo con quello vuoto che devo modificare; 
+//  sennò uso quello vuoto 
 
 //  local storage e session storage 
 

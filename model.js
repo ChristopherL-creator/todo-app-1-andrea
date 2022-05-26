@@ -39,7 +39,12 @@ class Todo{
       todo.id = obj.id;
       todo.priorityOrder = obj.priority;
       return todo;
-    } 
+    }  
+
+     toDbObj() {
+      const obj = {name: this.name, tags: this.tags, priority: this.priority.order, creationDate: this._creationDate/1000}; //  creo oggetto appostamente perche venga salvato in db 
+      return obj;
+    }
   
   //  ordinare per priorità
     static orderToDoByPriority(t1, t2){ 
