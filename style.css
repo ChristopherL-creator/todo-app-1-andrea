@@ -32,7 +32,7 @@ body{
 
 .todos-container{
   flex-grow: 1;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 
 .add-button{
@@ -70,7 +70,7 @@ button{
   height: 2px;
 }
 
-.tag{
+.chip{
   border: 1px solid;
   padding: 2px;
   border-radius: 4px;
@@ -88,4 +88,17 @@ button{
 .buttons-container{
   display: flex;
   justify-content: space-between;
+} 
+
+.save-button{ 
+  background-color: #414141; 
+  color: rgb(193, 193, 193); 
+  border: 1px;
+  border-radius: 5px; 
+  margin: 5px;
+} 
+
+.input-name{ 
+  width: 80%; 
+  margin: 5px;
 }

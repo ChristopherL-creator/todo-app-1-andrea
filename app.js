@@ -31,7 +31,7 @@ function goToTodoPage(id, name) {
 function populateTagContainer(container, tags){
   for (const tag of tags) {
     const span = document.createElement('span');
-    span.classList.add('tag');
+    span.classList.add('chip');
     const node = document.createTextNode('#' + tag);
     span.appendChild(node);
     container.appendChild(span)
