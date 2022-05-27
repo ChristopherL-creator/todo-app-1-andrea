@@ -11,9 +11,7 @@ function goToTodoPage(id, name) {
 //  se c'è un id (tipo in funzione edit), porto in nuova pagina in cui passo lo stesso id
     urlString = urlString + 
                 '?id=' + 
-                id + 
-                '?name=' + 
-                name; 
+                id;
   }
   window.location.href = urlString;
 } 
