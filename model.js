@@ -1,10 +1,11 @@
 class Todo{
 
-    static PRIORITY = {
-      low: { order: 0, name: 'bassa' ,color: 'green'},
-      medium: { order: 1, name: 'media', color: 'yellow' },
-      high: { order: 2, name: 'alta', color: 'orange' },
-      veryHigh: { order: 3, name: 'molto alta', color: 'red' }
+    static PRIORITY = { 
+      done: {order: -1, name: 'completato', color: 'grey'},
+      low: {order: 0, name: 'bassa' ,color: 'green'},
+      medium: {order: 1, name: 'media', color: 'yellow'},
+      high: {order: 2, name: 'alta', color: 'orange'},
+      veryHigh: {order: 3, name: 'molto alta', color: 'red'}
     }
   
     constructor(name, tags = [], creationDate = new Date(), priority = Todo.PRIORITY.low){
@@ -31,18 +32,27 @@ class Todo{
         this.priority = Todo.PRIORITY.high;
       } else if (order === 3) {
         this.priority = Todo.PRIORITY.veryHigh;
+      } else if (order === -1) {
+        this.priority = Todo.PRIORITY.done;
       }
     }
-  //  posso importare priority tramite il solo numero
+  //  posso importare priority tramite il solo numero 
+
     static fromDbObj(obj){
       const todo = new Todo(obj.name, obj.tags, new Date(obj.creationDate * 1000));
       todo.id = obj.id;
-      todo.priorityOrder = obj.priority;
+      todo.priorityOrder = obj.priority; 
+      if (obj.doneDate) {
+        todo.doneDate = obj.doneDate;
+      }
       return todo;
     }  
 
-     toDbObj() {
+     toDbObj(){
       const obj = {name: this.name, tags: this.tags, priority: this.priority.order, creationDate: this._creationDate/1000}; //  creo oggetto appostamente perche venga salvato in db 
+      if (this.doneDate) {
+        obj.doneDate = this.doneDate;
+      }
       return obj;
     }
   

@@ -149,9 +149,6 @@ function saveToDo() { //  deve fare solo un controllo, che ci sia il name nell'i
           'Content-Type': 'application/json'
         }
       };
-
-      
-      
     }
 
     fetch(url, fetchOptions) 
@@ -172,6 +169,7 @@ if (params.id) {  //  se hanno id, li ho chiamati per modifica
   fillForm(selectedToDo)
 } 
 
+//  per check guardo data in cui faccio check: spazio su db minimo;
 //  creo todo vuoto, 
 //  se sono in modifica riempio todo con quello vuoto che devo modificare; 
 //  sennò uso quello vuoto 

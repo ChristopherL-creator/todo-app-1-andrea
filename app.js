@@ -94,15 +94,40 @@ function deleteTodo(id){
   .catch(error => stopLoading())
 } 
 
-function requestDeleteToDo(id) {
+function requestConfirmToDelete(id) {
   if(confirm('sicuro?')){ 
     deleteTodo(id);
   } else { 
     alert('pheww');
   } 
+} 
+
+function toDoDone(todo) {
+  console.log('done', todo); 
+  todo.doneDate = new Date().getTime() / 1000; //  prendo la data di oggi, in millisecondi
+  console.log('todo', todo);
+  todo.priority = Todo.PRIORITY.done; //  imposto la priorità del nuovo todo come "done", ossia -1
+  const dbObj = todo.toDbObj(); //  mi prendo obj todo da model
+  const dbObjJson = JSON.stringify(dbObj);  //  trasformo l'oggetto in stringa
+
+  const url = BASE_URL + 
+              '/' + 
+              todo.id; 
+
+  fetchOptions = { 
+    method: 'PUT', body: dbObjJson, headers:{ 
+      'Content-Type': 'application/json'
+    }
+  }; 
+
+  fetch(url, fetchOptions) 
+  .then(resp => resp.json()) 
+  .then(res => displayTodos(todosArray))
 }
 
-function displayTodos(todos){
+function displayTodos(todos){ 
+// così rioridina le tasks ogni volta che viene chiamata;
+  todosArray.sort(Todo.orderToDoByPriority);
 
   const todosContainer = document.getElementById('todos-container');
 
@@ -120,11 +145,24 @@ function displayTodos(todos){
     populateTagContainer(tagContainer, todo.tags)
 
     const deleteButton = todoCard.querySelector('.delete-button');
-    deleteButton.onclick = () => requestDeleteToDo(todo.id); 
+    deleteButton.onclick = () => requestConfirmToDelete(todo.id); 
 
-    const editButton = todoCard.querySelector('.edit-button'); 
-//  ho passato id della task su cui premo "edit"
-    editButton.onclick = () => goToTodoPage(todo.id, todo.name);
+    const editButton = todoCard.querySelector('.edit-button');  
+    if (todo.doneDate) {
+      editButton.style.display = 'none';
+    } else { 
+      //  ho passato id della task su cui premo "edit"
+    editButton.onclick = () => goToTodoPage(todo.id, todo.name); 
+    }
+
+//  qyeryslector prende primo elemento con stringa richiesta, getElement... prende una collezione di elementi;
+    const doneButton = todoCard.querySelector('.done-button'); 
+    if (todo.doneDate) {  //  se è presente doneDate, sparisce
+      doneButton.style.display = 'none';
+    } else { 
+      // dovremo fare fetch di una put, scriviamo in database
+      doneButton.onclick = () => toDoDone(todo); 
+    } 
 
     const divider = todoCard.querySelector('.divider');
     divider.style.backgroundColor = todo.priority.color;
