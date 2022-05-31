@@ -4,10 +4,10 @@ const BASE_URL = 'https://628d3321a3fd714fd040dac4.mockapi.io/todo'
 let todosArray = [];
 
 
-function goToTodoPage(id, name) { 
+function goToTodoPage(id) { 
 //  parametri url: www.pippo.it/nome pagina?K(ey)=V(alue)&K=V
   let urlString = "/todo.html";
-  if (id && name) { 
+  if (id) { 
 //  se c'è un id (tipo in funzione edit), porto in nuova pagina in cui passo lo stesso id
     urlString = urlString + 
                 '?id=' + 
